@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Ssh;
+namespace Rocketeers\Ssh;
 
 use Closure;
 use Exception;
@@ -165,7 +165,7 @@ class Ssh
 
         $commandString = implode(PHP_EOL, $commands);
 
-        $delimiter = 'EOF-SPATIE-SSH';
+        $delimiter = 'EOF-ROCKETEERS-SSH';
 
         $target = $this->getTargetForSsh();
 

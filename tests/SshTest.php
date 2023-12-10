@@ -1,7 +1,7 @@
 <?php
 
-use function Spatie\Snapshots\assertMatchesSnapshot;
-use Spatie\Ssh\Ssh;
+use function Rocketeers\Snapshots\assertMatchesSnapshot;
+use Rocketeers\Ssh\Ssh;
 
 use Symfony\Component\Process\Process;
 
@@ -86,13 +86,13 @@ it('throws an exception if a port is negative')
     ->throws(Exception::class, 'Port must be a positive integer.');
 
 it('can download a file', function () {
-    $command = $this->ssh->getDownloadCommand('spatie.be/current/.env', '.env');
+    $command = $this->ssh->getDownloadCommand('rocketeers.app/current/.env', '.env');
 
     assertMatchesSnapshot($command);
 });
 
 it('can upload a file', function () {
-    $command = $this->ssh->getUploadCommand('.env', 'spatie.be/current/.env');
+    $command = $this->ssh->getUploadCommand('.env', 'rocketeers.app/current/.env');
 
     assertMatchesSnapshot($command);
 });
@@ -121,7 +121,7 @@ it('can handle ipv4 addresses on execute', function () {
 
 it('can handle ipv4 addresses on upload', function () {
     $local = new Ssh('user', '127.0.0.2');
-    $command = $local->getUploadCommand('.env', 'spatie.be/current/.env');
+    $command = $local->getUploadCommand('.env', 'rocketeers.app/current/.env');
 
     assertMatchesSnapshot($command);
 });
@@ -135,7 +135,7 @@ it('can handle ipv6 addresses on execute', function () {
 
 it('can handle ipv6 addresses on upload', function () {
     $local = new Ssh('user', '::1');
-    $command = $local->getUploadCommand('.env', 'spatie.be/current/.env');
+    $command = $local->getUploadCommand('.env', 'rocketeers.app/current/.env');
 
     assertMatchesSnapshot($command);
 });
@@ -153,7 +153,7 @@ it('does not alter ssh command when setting timeout', function () {
 });
 
 it('does not alter scp command when setting timeout', function () {
-    $command = $this->ssh->setTimeout(10)->getUploadCommand('.env', 'spatie.be/current/.env');
+    $command = $this->ssh->setTimeout(10)->getUploadCommand('.env', 'rocketeers.app/current/.env');
 
     assertMatchesSnapshot($command);
 });

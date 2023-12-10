@@ -1,9 +1,5 @@
 # A lightweight package to execute commands over an SSH connection
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/ssh.svg?style=flat-square)](https://packagist.org/packages/spatie/ssh)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/ssh/run-tests?label=tests)](https://github.com/spatie/ssh/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/ssh.svg?style=flat-square)](https://packagist.org/packages/spatie/ssh)
-
 You can execute an SSH command like this:
 
 ```php
@@ -11,14 +7,6 @@ Ssh::create('user', 'host')->execute('your favorite command');
 ```
 
 It will return an instance of [Symfony's `Process`](https://symfony.com/doc/current/components/process.html).
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/ssh.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/ssh)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
@@ -52,7 +40,6 @@ To check if your command ran ok
 $process->isSuccessful();
 ```
 
-
 This is how you can get the output
 
 ```php
@@ -74,7 +61,6 @@ $process = Ssh::create('user', 'example.com')->execute([
 
 You can choose a port by passing it to the constructor.
 
-
 ```php
 $port = 123;
 
@@ -86,10 +72,10 @@ Alternatively you can use the `usePort` function:
 ```php
 Ssh::create('user', 'host')->usePort($port);
 ```
+
 ### Setting a timeout
 
 You can set a timeout for the command.
-
 
 ```php
 Ssh::create('user', 'host')->setTimeout(100);
@@ -114,7 +100,6 @@ Ssh::create('user', 'host')->useMultiplexing($controlPath, $controlPersist);
 
 ```
 
-
 ### Specifying the private key to use
 
 You can use `usePrivateKey` to specify a path to a private SSH key to use.
@@ -130,6 +115,7 @@ By default, strict host key checking is enabled. You can disable strict host key
 ```php
 Ssh::create('user', 'host')->disableStrictHostKeyChecking();
 ```
+
 ### Enable quiet mode
 
 By default, the quiet mode is disabled. You can enable quiet mode using `enableQuietMode`.
@@ -174,17 +160,18 @@ Ssh::create('user', 'host')->configureProcess(fn (Process $process) => $process-
 
 ### Immediately responding to output
 
-You can get notified whenever your command produces output by passing a closure to `onOutput`. 
+You can get notified whenever your command produces output by passing a closure to `onOutput`.
 
 ```php
 Ssh::create('user', 'host')->onOutput(function($type, $line) {echo $line;})->execute('whoami');
 ```
 
 Whenever there is output that closure will get called with two parameters:
-- `type`: this can be `Symfony\Component\Process\Process::OUT` for regular output and `Symfony\Component\Process\Process::ERR` for error output
-- `line`: the output itself
 
-### Windows Target 
+-   `type`: this can be `Symfony\Component\Process\Process::OUT` for regular output and `Symfony\Component\Process\Process::ERR` for error output
+-   `line`: the output itself
+
+### Windows Target
 
 If your target is a Windows machine, you can use the `removeBash` method to remove the bash command from the command line.
 
@@ -194,7 +181,7 @@ Ssh::create('user', 'host')->removeBash();
 
 ## Testing
 
-``` bash
+```bash
 composer test
 ```
 
@@ -208,16 +195,17 @@ Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTI
 
 ## Security
 
-If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
+If you've found a bug regarding security please mail [security@rocketeers.app](mailto:security@rocketeers.app) instead of using the issue tracker.
 
 ## Alternatives
 
-  If you need some more features, take a look at [DivineOmega/php-ssh-connection](https://github.com/DivineOmega/php-ssh-connection).
+If you need some more features, take a look at [DivineOmega/php-ssh-connection](https://github.com/DivineOmega/php-ssh-connection).
 
 ## Credits
 
-- [Freek Van der Herten](https://github.com/freekmurze)
-- [All Contributors](../../contributors)
+-   [Freek Van der Herten](https://github.com/freekmurze)
+-   [Mar van Eijk](https://github.com/markvaneijk)
+-   [All Contributors](../../contributors)
 
 The `Ssh` class contains code taken from [laravel/envoy](https://laravel.com/docs/6.x/envoy)
 

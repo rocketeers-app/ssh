@@ -2,16 +2,20 @@
     "name": "rocketeers-app/ssh",
     "description": "A lightweight package to execute commands over an SSH connection",
     "keywords": [
-        "spatie",
         "ssh"
     ],
-    "homepage": "https://github.com/spatie/ssh",
+    "homepage": "https://github.com/rocketeers-app/ssh",
     "license": "MIT",
     "authors": [
         {
             "name": "Freek Van der Herten",
-            "email": "freek@spatie.be",
-            "homepage": "https://spatie.be",
+            "email": "freek@rocketeers.app",
+            "homepage": "https://rocketeers.app",
+            "role": "Developer"
+        }, {
+            "name": "Mark van Eijk",
+            "email": "mark@rocketeers.app",
+            "homepage": "https://rocketeers.app",
             "role": "Developer"
         }
     ],
@@ -32,12 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Ssh\\": "src"
+            "Rocketeers\\Ssh\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Ssh\\Tests\\": "tests"
+            "Rocketeers\\Ssh\\Tests\\": "tests"
         }
     },
     "scripts": {
