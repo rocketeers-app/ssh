@@ -169,9 +169,9 @@ class Ssh
 
         $target = $this->getTargetForSsh();
 
-        if (in_array($this->host, ['local', 'localhost', '127.0.0.1'])) {
-            return $commandString;
-        }
+        #if (in_array($this->host, ['local', 'localhost', '127.0.0.1'])) {
+        #    return $commandString;
+        #}
 
         $bash = $this->addBash ? "'bash -se'" : '';
 
