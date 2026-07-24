@@ -2,6 +2,14 @@
 
 All notable changes to `ssh` will be documented in this file
 
+## 1.13.2 - 2026-07-24
+
+### What's Changed
+
+* Report real exit codes for Windows targets by @freekmurze in https://github.com/spatie/ssh/pull/125
+
+**Full Changelog**: https://github.com/spatie/ssh/compare/1.13.1...1.13.2
+
 ## 1.13.1 - 2025-11-23
 
 ### What's Changed
