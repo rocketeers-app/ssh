@@ -146,6 +146,18 @@ it('can remove bash command', function () {
     assertMatchesSnapshot($command);
 });
 
+it('can run a single command on windows', function () {
+    $command = $this->ssh->onWindows()->getExecuteCommand('whoami');
+
+    assertMatchesSnapshot($command);
+});
+
+it('can run multiple commands on windows', function () {
+    $command = $this->ssh->onWindows()->getExecuteCommand(['whoami', 'cd C:\\Windows']);
+
+    assertMatchesSnapshot($command);
+});
+
 it('does not alter ssh command when setting timeout', function () {
     $command = $this->ssh->setTimeout(10)->getExecuteCommand('whoami');
 
