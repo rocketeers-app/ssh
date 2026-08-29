@@ -146,6 +146,18 @@ it('can remove bash command', function () {
     assertMatchesSnapshot($command);
 });
 
+it('can run a single command on windows', function () {
+    $command = $this->ssh->onWindows()->getExecuteCommand('whoami');
+
+    assertMatchesSnapshot($command);
+});
+
+it('can run multiple commands on windows', function () {
+    $command = $this->ssh->onWindows()->getExecuteCommand(['whoami', 'cd C:\\Windows']);
+
+    assertMatchesSnapshot($command);
+});
+
 it('does not alter ssh command when setting timeout', function () {
     $command = $this->ssh->setTimeout(10)->getExecuteCommand('whoami');
 
@@ -154,6 +166,27 @@ it('does not alter ssh command when setting timeout', function () {
 
 it('does not alter scp command when setting timeout', function () {
     $command = $this->ssh->setTimeout(10)->getUploadCommand('.env', 'rocketeers.app/current/.env');
+
+    assertMatchesSnapshot($command);
+});
+
+it('can login without user', function () {
+    $ssh = new Ssh(null, 'example.com');
+    $command = $ssh->getExecuteCommand('whoami');
+
+    assertMatchesSnapshot($command);
+});
+
+it('can login with a password', function () {
+    $ssh = new Ssh('user', 'example.com', 22, 'password');
+    $command = $ssh->getExecuteCommand('whoami');
+
+    assertMatchesSnapshot($command);
+});
+
+it('can login with a password failed', function () {
+    $ssh = new Ssh('user', 'example.com', 22, 'wrong_password');
+    $command = $ssh->getExecuteCommand('whoami');
 
     assertMatchesSnapshot($command);
 });

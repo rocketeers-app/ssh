@@ -2,6 +2,81 @@
 
 All notable changes to `ssh` will be documented in this file
 
+## 1.13.2 - 2026-07-24
+
+### What's Changed
+
+* Report real exit codes for Windows targets by @freekmurze in https://github.com/spatie/ssh/pull/125
+
+**Full Changelog**: https://github.com/spatie/ssh/compare/1.13.1...1.13.2
+
+## 1.13.1 - 2025-11-23
+
+### What's Changed
+
+* Update README.md with sshpass requirements on usePassword usage by @ilbuonmarcio in https://github.com/spatie/ssh/pull/117
+* Update issue template by @AlexVanderbist in https://github.com/spatie/ssh/pull/118
+* Added Symfony 8 support to all symfony/* packages. by @thecaliskan in https://github.com/spatie/ssh/pull/122
+
+### New Contributors
+
+* @ilbuonmarcio made their first contribution in https://github.com/spatie/ssh/pull/117
+* @AlexVanderbist made their first contribution in https://github.com/spatie/ssh/pull/118
+
+**Full Changelog**: https://github.com/spatie/ssh/compare/1.13.0...1.13.1
+
+## 1.13.0 - 2024-12-23
+
+### What's Changed
+
+* Add password authentication support for SSH by @shaunluedeke in https://github.com/spatie/ssh/pull/103
+
+### New Contributors
+
+* @shaunluedeke made their first contribution in https://github.com/spatie/ssh/pull/103
+
+**Full Changelog**: https://github.com/spatie/ssh/compare/1.12.0...1.13.0
+
+## 1.12.0 - 2024-11-07
+
+### What's Changed
+
+* Add support for PHP 8.4 by @lyrixx in https://github.com/spatie/ssh/pull/106
+
+### New Contributors
+
+* @lyrixx made their first contribution in https://github.com/spatie/ssh/pull/106
+
+**Full Changelog**: https://github.com/spatie/ssh/compare/1.11.0...1.12.0
+
+## Unreleased
+
+* Add support for PHP 8.4
+
+## 1.11.0 - 2024-10-18
+
+### What's Changed
+
+* Update Ssh.php by @leevigraham in https://github.com/spatie/ssh/pull/104
+
+### New Contributors
+
+* @leevigraham made their first contribution in https://github.com/spatie/ssh/pull/104
+
+**Full Changelog**: https://github.com/spatie/ssh/compare/1.10.1...1.11.0
+
+## 1.10.1 - 2024-04-05
+
+### What's Changed
+
+* Allow SSH connection without user by @pyrech in https://github.com/spatie/ssh/pull/98
+
+### New Contributors
+
+* @pyrech made their first contribution in https://github.com/spatie/ssh/pull/98
+
+**Full Changelog**: https://github.com/spatie/ssh/compare/1.10.0...1.10.1
+
 ## 1.10.0 - 2024-02-21
 
 ### What's Changed

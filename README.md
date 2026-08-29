@@ -73,6 +73,22 @@ Alternatively you can use the `usePort` function:
 Ssh::create('user', 'host')->usePort($port);
 ```
 
+### Using a password
+
+You can use the constructor to specify a password to use.
+
+```php
+Ssh::create('user', 'host', port, 'password');
+```
+
+Alternatively you can use the `usePassword` function:
+
+```php
+Ssh::create('user', 'host')->usePassword('password');
+```
+
+Please make sure to have the `sshpass` package installed on the local system, otherwise it will silently fail.
+
 ### Setting a timeout
 
 You can set a timeout for the command.
@@ -173,11 +189,13 @@ Whenever there is output that closure will get called with two parameters:
 
 ### Windows Target
 
-If your target is a Windows machine, you can use the `removeBash` method to remove the bash command from the command line.
+If your target is a Windows machine, use the `onWindows` method.
 
 ```php
-Ssh::create('user', 'host')->removeBash();
+Ssh::create('user', 'host')->onWindows()->execute('dir');
 ```
+
+By default this package pipes your commands to `bash` on the remote host. On Windows the remote shell is `cmd.exe`, which handles input differently and always reports a successful exit code, even when a command fails. The `onWindows` method passes your commands as an argument to `ssh` instead, so `cmd.exe` runs them through `cmd.exe /c` and their real exit code (and thus `isSuccessful()`) is preserved.
 
 ## Testing
 

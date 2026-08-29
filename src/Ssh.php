@@ -8,7 +8,7 @@ use Symfony\Component\Process\Process;
 
 class Ssh
 {
-    protected string $user;
+    protected ?string $user = null;
 
     protected string $host;
 
@@ -16,13 +16,17 @@ class Ssh
 
     protected bool $addBash;
 
+    protected bool $onWindows;
+
     protected Closure $processConfigurationClosure;
 
     protected Closure $onOutput;
 
     private int $timeout = 0;
 
-    public function __construct(string $user, string $host, int $port = null)
+    protected ?string $password = null;
+
+    public function __construct(?string $user, string $host, ?int $port = null, ?string $password = null)
     {
         $this->user = $user;
 
@@ -32,7 +36,11 @@ class Ssh
             $this->usePort($port);
         }
 
+        $this->password = $password;
+
         $this->addBash = true;
+
+        $this->onWindows = false;
 
         $this->processConfigurationClosure = fn (Process $process) => null;
 
@@ -64,6 +72,13 @@ class Ssh
             throw new Exception('Port must be a positive integer.');
         }
         $this->extraOptions['port'] = '-p ' . $port;
+
+        return $this;
+    }
+
+    public function usePassword(?string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }
@@ -152,6 +167,22 @@ class Ssh
         return $this;
     }
 
+    public function onWindows(): self
+    {
+        $this->onWindows = true;
+
+        return $this;
+    }
+
+    protected function getPasswordCommand(): string
+    {
+        if ($this->password !== null) {
+            return 'sshpass -p \'' . $this->password . '\' ';
+        }
+
+        return '';
+    }
+
     /**
      * @param string|array $command
      *
@@ -161,23 +192,60 @@ class Ssh
     {
         $commands = $this->wrapArray($command);
 
-        $extraOptions = implode(' ', $this->getExtraOptions());
+        if ($this->onWindows) {
+            return $this->getWindowsExecuteCommand($commands);
+        }
 
+        return $this->getBashExecuteCommand($commands);
+    }
+
+    /**
+     * @param array<int, string> $commands
+     */
+    protected function getBashExecuteCommand(array $commands): string
+    {
         $commandString = implode(PHP_EOL, $commands);
 
-        $delimiter = 'EOF-ROCKETEERS-SSH';
-
-        $target = $this->getTargetForSsh();
-
-        #if (in_array($this->host, ['local', 'localhost', '127.0.0.1'])) {
+        #if ($this->isLocalHost()) {
         #    return $commandString;
         #}
 
+        $passwordCommand = $this->getPasswordCommand();
+        $extraOptions = implode(' ', $this->getExtraOptions());
+        $target = $this->getTargetForSsh();
         $bash = $this->addBash ? "'bash -se'" : '';
+        $delimiter = 'EOF-ROCKETEERS-SSH';
 
-        return "ssh {$extraOptions} {$target} {$bash} << \\$delimiter".PHP_EOL
-                    .$commandString.PHP_EOL
-                    .$delimiter;
+        return "{$passwordCommand}ssh {$extraOptions} {$target} {$bash} << \\{$delimiter}".PHP_EOL
+            .$commandString.PHP_EOL
+            .$delimiter;
+    }
+
+    /**
+     * On Windows the remote shell is cmd.exe, which cannot read commands from stdin the way
+     * `bash -se` does. Passing the commands as an ssh argument runs them through `cmd.exe /c`,
+     * which returns the real exit code instead of always reporting success.
+     *
+     * @param array<int, string> $commands
+     */
+    protected function getWindowsExecuteCommand(array $commands): string
+    {
+        $commandString = implode(' && ', $commands);
+
+        if ($this->isLocalHost()) {
+            return $commandString;
+        }
+
+        $passwordCommand = $this->getPasswordCommand();
+        $extraOptions = implode(' ', $this->getExtraOptions());
+        $target = $this->getTargetForSsh();
+
+        return "{$passwordCommand}ssh {$extraOptions} {$target} \"{$commandString}\"";
+    }
+
+    protected function isLocalHost(): bool
+    {
+        return in_array($this->host, ['local', 'localhost', '127.0.0.1']);
     }
 
     /**
@@ -206,7 +274,9 @@ class Ssh
 
     public function getDownloadCommand(string $sourcePath, string $destinationPath): string
     {
-        return "scp {$this->getExtraScpOptions()} {$this->getTargetForScp()}:$sourcePath $destinationPath";
+        $passwordCommand = $this->getPasswordCommand();
+
+        return "{$passwordCommand}scp {$this->getExtraScpOptions()} {$this->getTargetForScp()}:$sourcePath $destinationPath";
     }
 
     public function download(string $sourcePath, string $destinationPath): Process
@@ -218,7 +288,9 @@ class Ssh
 
     public function getUploadCommand(string $sourcePath, string $destinationPath): string
     {
-        return "scp {$this->getExtraScpOptions()} $sourcePath {$this->getTargetForScp()}:$destinationPath";
+        $passwordCommand = $this->getPasswordCommand();
+
+        return "{$passwordCommand}scp {$this->getExtraScpOptions()} $sourcePath {$this->getTargetForScp()}:$destinationPath";
     }
 
     public function upload(string $sourcePath, string $destinationPath): Process
@@ -268,11 +340,19 @@ class Ssh
     {
         $host = filter_var($this->host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? '[' . $this->host . ']' : $this->host;
 
+        if ($this->user === null) {
+            return $host;
+        }
+
         return "{$this->user}@{$host}";
     }
 
     protected function getTargetForSsh(): string
     {
+        if ($this->user === null) {
+            return $this->host;
+        }
+
         return "{$this->user}@{$this->host}";
     }
 }
